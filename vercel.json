@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/:path*", "has": [{ "type": "host", "value": "www.belajarpython.online" }], "destination": "https://belajarpython.online/:path*", "permanent": true }
+  ]
+}

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#D2C7E5" />
+  <meta name="description" content="Pylearn — Belajar Python seru dan interaktif untuk siswa kelas 8. Materi lengkap, contoh kode, dan latihan langsung di browser." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
+  <link rel="mask-icon" href="favicon.svg" color="#8E7BB6" />
+  <link rel="canonical" href="https://belajarpython.online/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://belajarpython.online/" />
+  <meta property="og:title" content="Pylearn — Belajar Python Seru untuk Kelas 8" />
+  <meta property="og:description" content="Belajar Python seru dan interaktif untuk siswa kelas 8." />
+  <meta property="og:site_name" content="Pylearn" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://belajarpython.online/" />
+  <meta name="twitter:title" content="Pylearn — Belajar Python Seru untuk Kelas 8" />
+  <meta name="twitter:description" content="Belajar Python seru dan interaktif untuk siswa kelas 8." />
+  <title>Pylearn — Belajar Python Seru untuk Kelas 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css?v=18" />
+</head>
+<body>
+  <div class="app">
+
+    <!-- ===== LANDING PAGE ===== -->
+    <section class="screen screen--landing" data-screen="landing">
+      <div class="landing__topbar">
+        <div class="logo">
+          <span class="logo__mark" data-animal="snake" data-size="28"></span>
+          <span class="logo__text">Pylearn</span>
+        </div>
+      </div>
+
+      <main class="landing__content">
+        <div class="hero">
+          <div class="hero__art">
+            <pre class="hero__code">print("Hello,<br>&nbsp;Dunia!")</pre>
+            <div class="hero__balloon" data-animal="rabbit" data-size="36"></div>
+          </div>
+          <h1 class="hero__title">Selamat Datang di Pylearn!</h1>
+          <p class="hero__subtitle">Belajar pemrograman Python jadi menyenangkan dengan materi interaktif dan latihan seru. Khusus untuk anak Kelas 8!</p>
+        </div>
+
+        <div class="section" id="value">
+          <h2 class="section__title">Kenapa Harus Belajar Python?</h2>
+          <div class="value-cards">
+            <div class="value-card">
+              <div class="value-card__icon" data-animal="owl" data-size="32"></div>
+              <h3>Mudah Dipahami</h3>
+              <p>Sintaks Python sederhana & mirip bahasa manusia. Cocok untuk pemula!</p>
+            </div>
+            <div class="value-card">
+              <div class="value-card__icon" data-animal="panda" data-size="32"></div>
+              <h3>Banyak Dipakai</h3>
+              <p>Dari web, game, robotik, hingga sains — Python ada di mana-mana.</p>
+            </div>
+            <div class="value-card">
+              <div class="value-card__icon" data-animal="fox" data-size="32"></div>
+              <h3>Masa Depan Cerah</h3>
+              <p>Skill Python dibutuhkan di banyak karier masa depan. Mulai dari sekarang!</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="landing__cta">
+          <h2>Siap memulai petualangan kodingmu?</h2>
+          <button class="btn btn--primary btn--lg" data-go="beranda">Mulai Belajar Sekarang</button>
+        </div>
+      </main>
+
+      <footer class="landing__footer">
+        <p>© 2026 Pylearn · Dibuat untuk siswa Kelas 8 <span data-animal="snake" data-size="14"></span></p>
+      </footer>
+    </section>
+
+    <!-- ===== ONBOARDING / INPUT NAMA ===== -->
+    <section class="screen screen--onboarding" data-screen="onboarding">
+      <div class="onboarding">
+        <div class="onboarding__art" data-animal="snake" data-size="80"></div>
+        <h1 class="onboarding__title">Hai! Kenalan dulu yuk 🎀</h1>
+        <p class="onboarding__sub">Sebelum mulai belajar, tulis nama panggilanmu supaya Pylearn bisa menyapamu!</p>
+        <form class="onboarding__form" id="name-form">
+          <input type="text" id="name-input" class="onboarding__input" placeholder="Nama panggilanmu..." maxlength="20" autocomplete="off" required />
+          <button type="submit" class="btn btn--primary btn--lg" id="name-submit">Lanjut →</button>
+        </form>
+        <p class="onboarding__hint">Nama kamu disimpan di perangkat ini saja, tidak dikirim ke mana pun. 🐾</p>
+      </div>
+    </section>
+
+    <!-- ===== APP SHELL (Beranda, Materi, Games, Latihan, Nilai) ===== -->
+    <div class="appshell" data-appshell hidden>
+
+      <!-- ===== BERANDA ===== -->
+      <section class="screen" data-screen="beranda">
+        <header class="appbar appbar--noncenter">
+          <div class="appbar__greet">
+            <p class="appbar__hello">Halooo, <strong id="user-name">Siswa</strong>!</p>
+            <p class="appbar__ask">Sudah siap bermain python hari ini?</p>
+          </div>
+          <div class="avatar-wrap" id="avatar-wrap">
+            <div class="appbar__avatar" id="user-avatar">?</div>
+            <div class="avatar-menu" id="avatar-menu" hidden>
+              <button class="avatar-menu__item" id="menu-change-name"><span data-animal="bear" data-size="18"></span> Ganti Nama</button>
+              <button class="avatar-menu__item avatar-menu__item--danger" id="menu-reset"><span>🔄</span> Reset Data</button>
+            </div>
+          </div>
+        </header>
+
+        <main class="content">
+          <!-- Floating decorative animals -->
+          <div class="float-deco" aria-hidden="true">
+            <span class="float-deco__a" data-animal="rabbit" data-size="32"></span>
+            <span class="float-deco__b" data-animal="owl" data-size="28"></span>
+            <span class="float-deco__c" data-animal="fox" data-size="30"></span>
+          </div>
+
+          <!-- Welcome mascot banner -->
+          <div class="welcome">
+            <div class="welcome__mascot" data-animal="snake" data-size="64"></div>
+            <div class="welcome__bubble">
+              <p id="welcome-msg">Yuk belajar Python hari ini! 🐍</p>
+            </div>
+          </div>
+
+          <!-- Progress keseluruhan (3 modul) -->
+          <div class="overall-progress" id="beranda-progress">
+            <div class="overall-progress__head">
+              <span>Progres keseluruhan</span>
+              <span class="overall-progress__pct" id="beranda-pct">0%</span>
+            </div>
+            <div class="progress progress--lg progress--sparkle">
+              <div class="progress__bar" id="beranda-bar" style="width:0%"></div>
+            </div>
+            <p class="overall-progress__info" id="beranda-info">0 dari 3 Modul Selesai <span data-animal="panda" data-size="18"></span></p>
+          </div>
+
+          <!-- CTA alur -->
+          <button class="btn btn--primary btn--block btn--lg btn--pulse" id="flow-cta" data-go="materi" style="margin-top:14px">Mulai Belajar Materi →</button>
+
+          <!-- Fakta seru harian -->
+          <div class="funfact" id="funfact">
+            <div class="funfact__head">
+              <span class="funfact__ico" data-animal="owl" data-size="22"></span>
+              <span class="funfact__label">Fakta Seru Python</span>
+            </div>
+            <p class="funfact__text" id="funfact-text">Python dinamai dari acara TV komedi "Monty Python", bukan dari ular!</p>
+          </div>
+
+          <!-- Badge achievement -->
+          <h2 class="block-title"><span data-animal="bear" data-size="20"></span> Lencana Kamu</h2>
+          <div class="badges" id="badges">
+            <div class="badge" data-badge="0">
+              <div class="badge__ico">🌟</div>
+              <p class="badge__t">Langkah Pertama</p>
+              <p class="badge__s">Selesaikan 1 modul</p>
+            </div>
+            <div class="badge is-locked" data-badge="1">
+              <div class="badge__ico">📚</div>
+              <p class="badge__t">Kutu Buku</p>
+              <p class="badge__s">Selesaikan semua modul</p>
+            </div>
+            <div class="badge is-locked" data-badge="2">
+              <div class="badge__ico">📝</div>
+              <p class="badge__t">Rajin Latihan</p>
+              <p class="badge__s">Selesaikan 3 latihan</p>
+            </div>
+            <div class="badge is-locked" data-badge="3">
+              <div class="badge__ico">🏆</div>
+              <p class="badge__t">Juara Python</p>
+              <p class="badge__s">Skor latihan ≥ 90</p>
+            </div>
+          </div>
+
+          <!-- Motivasi harian -->
+          <div class="motivasi">
+            <span class="motivasi__char" data-animal="panda" data-size="44"></span>
+            <p class="motivasi__text" id="motivasi-text">"Belajar coding itu seperti main puzzle — asyik dan bikin nagih!"</p>
+          </div>
+
+          <!-- Tombol navigasi -->
+          <h2 class="block-title">Menu</h2>
+          <div class="nav-tiles">
+            <button class="nav-tile" data-go="materi">
+              <span class="nav-tile__ico" data-animal="owl" data-size="34"></span>
+              <span class="nav-tile__t">Materi</span>
+              <span class="nav-tile__s" id="tile-materi">3 modul</span>
+            </button>
+            <button class="nav-tile is-locked" id="tile-games" data-go="games">
+              <span class="nav-tile__ico" data-animal="panda" data-size="34"></span>
+              <span class="nav-tile__t">Latihan</span>
+              <span class="nav-tile__s" id="tile-games-sub">Selesaikan modul dulu</span>
+              <span class="nav-tile__lock">🔒</span>
+            </button>
+            <button class="nav-tile is-locked" id="tile-nilai" data-go="nilai">
+              <span class="nav-tile__ico" data-animal="fox" data-size="34"></span>
+              <span class="nav-tile__t">Nilai</span>
+              <span class="nav-tile__s" id="tile-nilai-sub">Selesaikan Latihan 3 dulu</span>
+              <span class="nav-tile__lock">🔒</span>
+            </button>
+          </div>
+
+          <button class="btn btn--ghost btn--block" id="change-name-btn" style="margin-top:18px"><span data-animal="bear" data-size="22"></span> Ganti Nama</button>
+        </main>
+      </section>
+
+      <!-- ===== MATERI ===== -->
+      <section class="screen" data-screen="materi">
+        <header class="appbar appbar--center">
+          <button class="appbar__back" data-go="beranda">←</button>
+          <h1 class="appbar__title"><span data-animal="owl" data-size="24"></span> Materi Pembelajaran</h1>
+          <p class="appbar__subtitle">Selesaikan semua modul untuk membuka Latihan</p>
+        </header>
+
+        <main class="content">
+          <div class="overall-progress">
+            <div class="overall-progress__head">
+              <span>Progres keseluruhan</span>
+              <span class="overall-progress__pct" id="materi-pct">0%</span>
+            </div>
+            <div class="progress progress--lg">
+              <div class="progress__bar" id="materi-bar" style="width:0%"></div>
+            </div>
+            <p class="overall-progress__info" id="materi-info">0 dari 3 Modul Selesai <span data-animal="panda" data-size="18"></span></p>
+          </div>
+
+          <ul class="module-list" id="module-list">
+            <!-- diisi oleh main.js -->
+          </ul>
+        </main>
+      </section>
+
+      <!-- ===== MODUL DETAIL (halaman terpisah) ===== -->
+      <section class="screen" data-screen="modul">
+        <header class="appbar appbar--center">
+          <button class="appbar__back" id="modul-back-btn">←</button>
+          <h1 class="appbar__title" id="modul-appbar-title"><span data-animal="owl" data-size="24"></span> Modul</h1>
+          <p class="appbar__subtitle" id="modul-appbar-sub">Pelajari materi dengan saksama</p>
+        </header>
+
+        <main class="content">
+          <div class="module-detail__body" id="modul-body"></div>
+          <button class="btn btn--primary btn--block btn--lg" id="modul-complete">Tandai Selesai ✓</button>
+        </main>
+      </section>
+
+      <!-- ===== LATIHAN ===== -->
+      <section class="screen" data-screen="games">
+        <header class="appbar appbar--center">
+          <button class="appbar__back" data-go="beranda">←</button>
+          <h1 class="appbar__title"><span data-animal="panda" data-size="24"></span> Latihan Soal</h1>
+          <p class="appbar__subtitle">Uji pemahaman Python kamu!</p>
+        </header>
+
+        <main class="content">
+          <div class="lock-notice" id="games-locked" hidden>
+            <span data-animal="panda" data-size="56"></span>
+            <h3>Latihan Belum Tersedia</h3>
+            <p>Selesaikan Modul 1 dulu untuk membuka Latihan pertama!</p>
+            <button class="btn btn--primary btn--block" data-go="materi">Pelajari Materi →</button>
+          </div>
+
+          <div id="games-content">
+            <!-- Daftar latihan -->
+            <div class="games-progress">
+              <p>Latihan terselesaikan</p>
+              <strong id="games-count">0 / 3</strong>
+            </div>
+
+            <div class="game-list" id="game-list">
+              <article class="game-card game-card--dots" id="game-card-1">
+                <div class="game-card__art" data-animal="cat" data-size="48"></div>
+                <div class="game-card__body">
+                  <h3>Pilihan Ganda</h3>
+                  <p>Pilih jawaban yang paling tepat dari soal-soal seru!</p>
+                  <div class="game-card__meta">
+                    <span class="chip" id="g1-status">Belum dikerjakan</span>
+                  </div>
+                  <button class="btn btn--primary btn--block" data-game="1">Kerjakan</button>
+                </div>
+              </article>
+
+              <article class="game-card game-card--quiz" id="game-card-2">
+                <div class="game-card__art" data-animal="owl" data-size="48"></div>
+                <div class="game-card__body">
+                  <h3>Drag & Drop</h3>
+                  <p>Susun kode Python yang benar dengan memilih kata tepat!</p>
+                  <div class="game-card__meta">
+                    <span class="chip" id="g2-status">Belum dikerjakan</span>
+                  </div>
+                  <button class="btn btn--primary btn--block" data-game="2">Kerjakan</button>
+                </div>
+              </article>
+
+              <article class="game-card game-card--hunt" id="game-card-3">
+                <div class="game-card__art" data-animal="fox" data-size="48"></div>
+                <div class="game-card__body">
+                  <h3>Susun & Ketik Kode</h3>
+                  <p>Susun potongan kode dan ketik perintah Python yang benar!</p>
+                  <div class="game-card__meta">
+                    <span class="chip" id="g3-status">Belum dikerjakan</span>
+                  </div>
+                  <button class="btn btn--primary btn--block" data-game="3">Kerjakan</button>
+                </div>
+              </article>
+            </div>
+          </div>
+        </main>
+      </section>
+
+      <!-- ===== KUIS (halaman terpisah, muncul saat latihan dikerjakan) ===== -->
+      <section class="screen" data-screen="quiz">
+        <header class="appbar appbar--center">
+          <button class="appbar__back" id="quiz-back">←</button>
+          <h1 class="appbar__title" id="quiz-title"><span data-animal="cat" data-size="24"></span> Pilihan Ganda</h1>
+          <p class="appbar__subtitle">Uji pemahaman Python kamu!</p>
+        </header>
+
+        <main class="content">
+          <div class="quiz-scorebar">
+            <span class="quiz-scorebar__label">Skor:</span>
+            <span class="quiz-scorebar__value" id="quiz-score">0</span>
+            <span class="quiz-scorebar__total" id="quiz-total">/ 10</span>
+            <span class="quiz-scorebar__sep">·</span>
+            <span class="quiz-scorebar__label" id="quiz-type-label">Pilihan Ganda</span>
+          </div>
+
+          <div class="cheer" id="cheer" hidden>
+            <span class="cheer__char" data-animal="rabbit" data-size="64"></span>
+          </div>
+          <div class="cheer cheer--sad" id="cheer-sad" hidden>
+            <span class="cheer__char" data-animal="owl" data-size="64"></span>
+          </div>
+
+          <div id="quiz-container"></div>
+
+          <div class="quiz-nav" id="quiz-nav">
+            <button class="btn btn--ghost" id="quiz-prev">← Sebelumnya</button>
+            <span class="quiz-nav__count" id="quiz-count">1 / 10</span>
+            <button class="btn btn--primary" id="quiz-next">Berikutnya →</button>
+          </div>
+          <p class="quiz-nav__hint" id="quiz-nav-hint" hidden>Pilih jawaban dulu untuk lanjut, ya! 🐾</p>
+
+          <div class="quiz-result" id="quiz-result" hidden>
+            <div class="quiz-result__card">
+              <div class="quiz-result__emoji" id="quiz-result-emoji">🎉</div>
+              <h3 id="quiz-result-title">Kerja Bagus!</h3>
+              <p id="quiz-result-score">Skor: 0 / 10</p>
+              <div class="quiz-rekap" id="quiz-rekap" hidden></div>
+              <div class="quiz-result__btns" id="quiz-result-btns">
+                <button class="btn btn--primary btn--block" id="quiz-done">Selesai ✓</button>
+              </div>
+            </div>
+          </div>
+        </main>
+      </section>
+
+      <!-- ===== NILAI ===== -->
+      <section class="screen" data-screen="nilai">
+        <header class="appbar appbar--center">
+          <button class="appbar__back" data-go="beranda">←</button>
+          <h1 class="appbar__title"><span data-animal="fox" data-size="24"></span> Nilai & Kemajuan</h1>
+          <p class="appbar__subtitle">Lihat perkembangan belajarmu</p>
+        </header>
+
+        <main class="content">
+          <div class="grade-card">
+            <p class="grade-card__label">Nilai Latihan</p>
+            <div class="grade-card__grade" id="grade-overall">-</div>
+            <p class="grade-card__detail" id="grade-detail">Skor 0 / 100</p>
+          </div>
+
+          <h2 class="block-title">Statistik Per Latihan</h2>
+          <div class="subject-stats" id="subject-stats">
+            <!-- diisi oleh main.js -->
+          </div>
+        </main>
+      </section>
+
+      <!-- ===== LATIHAN screen dihapus, sudah digabung ke Games ===== -->
+
+    </div>
+
+    <!-- ===== MODAL RESET DATA ===== -->
+    <div class="modal-overlay" id="reset-modal" hidden>
+      <div class="modal-card">
+        <div class="modal-card__icon">🔄</div>
+        <h3 class="modal-card__title">Reset Semua Data?</h3>
+        <p class="modal-card__text">Semua nama, progres modul, dan nilai akan dihapus. Tindakan ini tidak bisa dibatalkan.</p>
+        <input type="password" class="modal-card__input" id="reset-password" placeholder="Masukkan password reset..." autocomplete="off" />
+        <p class="modal-card__err" id="reset-err" hidden>Password salah!</p>
+        <div class="modal-card__btns">
+          <button class="btn btn--ghost" id="reset-cancel">Batal</button>
+          <button class="btn btn--primary" id="reset-confirm">Reset Sekarang</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/icons.js?v=18"></script>
+  <script src="js/quiz-data.js?v=18"></script>
+  <script src="js/quiz.js?v=18"></script>
+  <script src="js/main.js?v=18"></script>
+</body>
+</html>

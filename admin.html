@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Nilai — Pylearn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --primary:#F2D894;--primary-light:#FEF6EC;--primary-ink:#4A3E26;
+      --accent:#D2C7E5;--accent-d:#8E7BB6;--accent-x:#B7A8DE;
+      --mint:#D3EADA;--bg:#F9ECE3;--bg-mint:#EAF4EF;--page:#ECDCC8;
+      --card:#ffffff;--ink:#3b3535;--ink-soft:#6a6363;--muted:#a59e9e;
+      --line:#ece4df;--ok:#6bbf8a;--bad:#e57373;--warn:#e8a05a;
+      --shadow-soft:0 2px 8px rgba(60,50,40,.08);
+      --font-body:'Nunito',system-ui,sans-serif;--font-mono:'Fira Code',monospace;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font-body);background:var(--page);color:var(--ink);min-height:100vh;line-height:1.5}
+    .wrap{max-width:1000px;margin:0 auto;padding:16px}
+
+    /* LOGIN */
+    .login{max-width:360px;margin:60px auto;background:var(--card);border-radius:20px;box-shadow:var(--shadow-soft);padding:32px 24px;text-align:center}
+    .login__ico{font-size:48px;margin-bottom:8px}
+    .login__title{font-size:22px;font-weight:900;color:var(--accent-d);margin-bottom:4px}
+    .login__sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+    .login__input{width:100%;padding:12px 16px;border:2px solid var(--line);border-radius:12px;font-family:var(--font-body);font-size:15px;margin-bottom:12px;outline:none;transition:border .2s}
+    .login__input:focus{border-color:var(--accent)}
+    .login__err{color:var(--bad);font-size:12px;margin-bottom:8px;min-height:16px}
+    .btn{display:inline-block;border:none;border-radius:12px;padding:12px 24px;font-family:var(--font-body);font-weight:800;font-size:15px;cursor:pointer;transition:transform .12s}
+    .btn:active{transform:scale(.97)}
+    .btn--primary{background:var(--primary);color:var(--primary-ink)}
+    .btn--ghost{background:transparent;color:var(--ink-soft);border:2px solid var(--line)}
+    .btn--danger{color:var(--bad);border-color:var(--bad)}
+    .btn--danger:hover{background:var(--bad);color:#fff}
+    .btn--block{display:block;width:100%}
+
+    /* DASHBOARD */
+    .dash{display:none}
+    .dash__head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+    .dash__title{font-size:24px;font-weight:900;color:var(--accent-d)}
+    .dash__title small{font-size:13px;font-weight:600;color:var(--muted);display:block}
+    .dash__actions{display:flex;gap:8px;flex-wrap:wrap}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px}
+    .stat{background:var(--card);border-radius:14px;padding:14px;box-shadow:var(--shadow-soft);text-align:center}
+    .stat__num{font-size:28px;font-weight:900;color:var(--accent-d)}
+    .stat__label{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+    .toolbar{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+    .search{flex:1;min-width:180px;padding:10px 14px;border:2px solid var(--line);border-radius:10px;font-family:var(--font-body);font-size:14px;outline:none}
+    .search:focus{border-color:var(--accent)}
+
+    .table-wrap{background:var(--card);border-radius:14px;box-shadow:var(--shadow-soft);overflow:hidden;overflow-x:auto}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    thead{background:var(--bg)}
+    th{padding:12px 10px;text-align:left;font-weight:800;color:var(--accent-d);font-size:11px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+    td{padding:10px;border-top:1px solid var(--line);white-space:nowrap}
+    tbody tr:hover{background:var(--primary-light)}
+    .grade{display:inline-block;padding:2px 10px;border-radius:20px;font-weight:900;font-size:12px}
+    .grade--A{background:#d4f0d4;color:#2d7a2d}
+    .grade--B{background:#fff3d4;color:#8a6d00}
+    .grade--C{background:#ffe8d4;color:#a85a00}
+    .grade--D{background:#ffd4d4;color:#a03030}
+    .grade--E{background:#f0d4d4;color:#7a2020}
+    .grade--none{background:var(--bg);color:var(--muted)}
+    .empty{text-align:center;padding:40px;color:var(--muted)}
+    .footer{text-align:center;margin-top:20px;color:var(--muted);font-size:12px}
+    .loading{text-align:center;padding:40px;color:var(--muted)}
+    .btn-del{border:none;background:transparent;color:var(--bad);font-size:16px;cursor:pointer;padding:4px 8px;border-radius:8px;transition:all .15s}
+    .btn-del:hover{background:#ffe0e0;transform:scale(1.15)}
+    .btn-del:active{transform:scale(.9)}
+    .confirm-bar{display:none;align-items:center;gap:10px;background:#fff3f3;border:1px solid var(--bad);border-radius:10px;padding:10px 14px;margin-bottom:12px}
+    .confirm-bar.is-show{display:flex}
+    .confirm-bar__msg{flex:1;font-size:13px;color:var(--ink)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- LOGIN -->
+    <div class="login" id="login">
+      <div class="login__ico">📊</div>
+      <h1 class="login__title">Dashboard Nilai Pylearn</h1>
+      <p class="login__sub">Masukkan password admin untuk melihat nilai siswa</p>
+      <input type="password" class="login__input" id="pw" placeholder="Password admin..." autocomplete="off" />
+      <p class="login__err" id="err" hidden>Password salah!</p>
+      <button class="btn btn--primary btn--block" id="login-btn">Masuk →</button>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="dash" id="dash">
+      <div class="dash__head">
+        <div>
+          <h1 class="dash__title">📊 Dashboard Nilai</h1>
+          <small>Rekap nilai siswa Pylearn</small>
+        </div>
+        <div class="dash__actions">
+          <button class="btn btn--ghost" id="refresh">🔄 Refresh</button>
+          <button class="btn btn--primary" id="export">⬇ Export CSV</button>
+          <button class="btn btn--ghost" id="logout">Keluar</button>
+        </div>
+      </div>
+
+      <div class="stats" id="stats"></div>
+
+      <div class="confirm-bar" id="confirm-bar">
+        <span class="confirm-bar__msg" id="confirm-msg"></span>
+        <button class="btn btn--ghost" id="confirm-cancel">Batal</button>
+        <button class="btn btn--primary" id="confirm-ok" style="background:var(--bad);color:#fff">Ya, Hapus</button>
+      </div>
+
+      <div class="toolbar">
+        <input type="text" class="search" id="search" placeholder="🔍 Cari nama siswa..." />
+        <button class="btn btn--ghost btn--danger" id="del-all">🗑 Hapus Semua</button>
+      </div>
+
+      <div class="table-wrap">
+        <table id="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nama</th>
+              <th>L1</th>
+              <th>L2</th>
+              <th>L3</th>
+              <th>Rata²</th>
+              <th>Grade</th>
+              <th>Selesai</th>
+              <th>Waktu</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+
+      <p class="footer">© 2026 Pylearn Admin · Data tersimpan di Supabase</p>
+    </div>
+
+  </div>
+
+  <script>
+    // ===== CONFIG (harus sama dengan main.js) =====
+    var SUPABASE_URL = 'https://hzedpsbwjnrxkzeaijkl.supabase.co';
+    var SUPABASE_KEY = 'sb_publishable_BausTTPoMcyf-U3JGNOigg_sfZhRpqv';
+    var ADMIN_PASSWORD = 'admin123';
+
+    var loginEl = document.getElementById('login');
+    var dashEl = document.getElementById('dash');
+    var pwInput = document.getElementById('pw');
+    var loginBtn = document.getElementById('login-btn');
+    var errEl = document.getElementById('err');
+    var logoutBtn = document.getElementById('logout');
+    var refreshBtn = document.getElementById('refresh');
+    var exportBtn = document.getElementById('export');
+    var searchInput = document.getElementById('search');
+    var tbody = document.getElementById('tbody');
+    var statsEl = document.getElementById('stats');
+    var allData = [];
+
+    // auto-login jika sudah login sebelumnya (session ini)
+    if (sessionStorage.getItem('pylearn_admin') === '1') showDash();
+
+    loginBtn.addEventListener('click', doLogin);
+    pwInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') doLogin(); });
+
+    function doLogin() {
+      if (pwInput.value === ADMIN_PASSWORD) {
+        sessionStorage.setItem('pylearn_admin', '1');
+        showDash();
+      } else {
+        errEl.hidden = false;
+        pwInput.value = '';
+        setTimeout(function () { errEl.hidden = true; }, 2500);
+      }
+    }
+
+    logoutBtn.addEventListener('click', function () {
+      sessionStorage.removeItem('pylearn_admin');
+      dashEl.style.display = 'none';
+      loginEl.style.display = 'block';
+      pwInput.value = '';
+    });
+
+    function showDash() {
+      loginEl.style.display = 'none';
+      dashEl.style.display = 'block';
+      loadData();
+    }
+
+    function loadData() {
+      if (!SUPABASE_URL || !SUPABASE_KEY) {
+        tbody.innerHTML = '<tr><td colspan="9" class="empty">⚠️ Supabase belum dikonfigurasi.<br>Isi SUPABASE_URL & SUPABASE_KEY di admin.html</td></tr>';
+        return;
+      }
+      tbody.innerHTML = '<tr><td colspan="9" class="loading">⏳ Memuat data...</td></tr>';
+      fetch(SUPABASE_URL + '/rest/v1/scores?select=*&order=created_at.desc', {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY
+        }
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (rows) {
+          allData = rows || [];
+          renderTable(allData);
+          renderStats(allData);
+        })
+        .catch(function (e) {
+          tbody.innerHTML = '<tr><td colspan="9" class="empty">❌ Gagal memuat: ' + e.message + '</td></tr>';
+        });
+    }
+
+    function gradeFromPct(pct) {
+      if (pct === null || pct === undefined) return { g: '-', cls: 'grade--none' };
+      if (pct >= 90) return { g: 'A', cls: 'grade--A' };
+      if (pct >= 80) return { g: 'B', cls: 'grade--B' };
+      if (pct >= 70) return { g: 'C', cls: 'grade--C' };
+      if (pct >= 60) return { g: 'D', cls: 'grade--D' };
+      return { g: 'E', cls: 'grade--E' };
+    }
+
+    function fmt(v) { return (v === null || v === undefined) ? '—' : v; }
+
+    function renderTable(rows) {
+      if (!rows || rows.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" class="empty">📭 Belum ada data nilai. Siswa belum mengerjakan latihan.</td></tr>';
+        return;
+      }
+      var html = '';
+      for (var i = 0; i < rows.length; i++) {
+        var r = rows[i];
+        var gr = gradeFromPct(r.rata);
+        html += '<tr>';
+        html += '<td>' + (i + 1) + '</td>';
+        html += '<td><strong>' + escapeHtml(r.nama || '') + '</strong></td>';
+        html += '<td>' + fmt(r.l1) + '</td>';
+        html += '<td>' + fmt(r.l2) + '</td>';
+        html += '<td>' + fmt(r.l3) + '</td>';
+        html += '<td><strong>' + fmt(r.rata) + '</strong></td>';
+        html += '<td><span class="grade ' + gr.cls + '">' + gr.g + '</span></td>';
+        html += '<td>' + escapeHtml(r.selesai || '') + '</td>';
+        html += '<td style="color:var(--muted);font-size:11px">' + escapeHtml(r.waktu || '') + '</td>';
+        html += '<td><button class="btn-del" data-del="' + escapeHtml(r.nama || '') + '" title="Hapus nilai siswa ini">🗑</button></td>';
+        html += '</tr>';
+      }
+      tbody.innerHTML = html;
+    }
+
+    function renderStats(rows) {
+      if (!rows || rows.length === 0) { statsEl.innerHTML = ''; return; }
+      var n = rows.length;
+      var done3 = rows.filter(function (r) { return r.selesai === '3/3'; }).length;
+      var sumRata = 0, cntRata = 0;
+      for (var i = 0; i < rows.length; i++) { if (rows[i].rata !== null && rows[i].rata !== undefined) { sumRata += rows[i].rata || 0; cntRata++; } }
+      var avg = cntRata > 0 ? Math.round(sumRata / cntRata) : 0;
+      var best = 0;
+      for (var j = 0; j < rows.length; j++) { if ((rows[j].rata || 0) > best) { best = rows[j].rata || 0; } }
+
+      statsEl.innerHTML =
+        statCard(n, 'Total Siswa') +
+        statCard(done3, 'Selesai 3/3') +
+        statCard(avg, 'Rata² Kelas') +
+        statCard(best, 'Nilai Tertinggi');
+    }
+
+    function statCard(num, label) {
+      return '<div class="stat"><div class="stat__num">' + num + '</div><div class="stat__label">' + label + '</div></div>';
+    }
+
+    searchInput.addEventListener('input', function () {
+      var q = searchInput.value.toLowerCase().trim();
+      if (!q) { renderTable(allData); return; }
+      var filtered = allData.filter(function (r) {
+        return (r.nama || '').toLowerCase().indexOf(q) >= 0;
+      });
+      renderTable(filtered);
+    });
+
+    refreshBtn.addEventListener('click', loadData);
+
+    // ===== DELETE FUNCTIONS =====
+    var confirmBar = document.getElementById('confirm-bar');
+    var confirmMsg = document.getElementById('confirm-msg');
+    var confirmOk = document.getElementById('confirm-ok');
+    var confirmCancel = document.getElementById('confirm-cancel');
+    var delAllBtn = document.getElementById('del-all');
+    var pendingDelete = null; // { type: 'one'|'all', nama: string }
+
+    function showConfirm(msg, action) {
+      pendingDelete = action;
+      confirmMsg.textContent = msg;
+      confirmBar.classList.add('is-show');
+      confirmBar.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    function hideConfirm() {
+      pendingDelete = null;
+      confirmBar.classList.remove('is-show');
+    }
+    confirmCancel.addEventListener('click', hideConfirm);
+
+    confirmOk.addEventListener('click', function () {
+      if (!pendingDelete) return;
+      if (pendingDelete.type === 'one') deleteOne(pendingDelete.nama);
+      else if (pendingDelete.type === 'all') deleteAll();
+      hideConfirm();
+    });
+
+    // hapus per-siswa (klik tombol 🗑 di baris)
+    tbody.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-del]');
+      if (!btn) return;
+      var nama = btn.getAttribute('data-del');
+      showConfirm('Hapus nilai siswa "' + nama + '"? Tindakan ini tidak bisa dibatalkan.', { type: 'one', nama: nama });
+    });
+
+    function deleteOne(nama) {
+      fetch(SUPABASE_URL + '/rest/v1/scores?nama=eq.' + encodeURIComponent(nama), {
+        method: 'DELETE',
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+      }).then(function (r) {
+        if (r.ok) { loadData(); }
+        else { alert('Gagal menghapus. Cek console.'); console.error('Delete failed:', r.status); }
+      }).catch(function (e) { alert('Error: ' + e.message); });
+    }
+
+    // hapus semua
+    delAllBtn.addEventListener('click', function () {
+      if (allData.length === 0) { alert('Tidak ada data untuk dihapus.'); return; }
+      showConfirm('Hapus SEMUA ' + allData.length + ' data nilai? Tindakan ini tidak bisa dibatalkan!', { type: 'all' });
+    });
+
+    function deleteAll() {
+      fetch(SUPABASE_URL + '/rest/v1/scores?neq=nama', {
+        method: 'DELETE',
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+      }).then(function (r) {
+        if (r.ok) { loadData(); }
+        else { alert('Gagal menghapus semua. Cek console.'); console.error('Delete all failed:', r.status); }
+      }).catch(function (e) { alert('Error: ' + e.message); });
+    }
+
+    exportBtn.addEventListener('click', function () {
+      if (allData.length === 0) return;
+      var csv = 'No,Nama,Latihan 1,Latihan 2,Latihan 3,Rata-rata,Grade,Selesai,Waktu\n';
+      for (var i = 0; i < allData.length; i++) {
+        var r = allData[i];
+        var gr = gradeFromPct(r.rata);
+        var row = [
+          i + 1,
+          '"' + (r.nama || '').replace(/"/g, '""') + '"',
+          fmt(r.l1), fmt(r.l2), fmt(r.l3), fmt(r.rata),
+          gr.g, '"' + (r.selesai || '') + '"', '"' + (r.waktu || '') + '"'
+        ];
+        csv += row.join(',') + '\n';
+      }
+      var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'nilai-pylearn-' + new Date().toISOString().slice(0, 10) + '.csv';
+      a.click();
+    });
+
+    function escapeHtml(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+  </script>
+</body>
+</html>
